@@ -14,7 +14,8 @@ import Logo from '../../components/Logo';
 import Image from '../../components/Image';
 // sections
 import { RegisterForm } from '../../sections/auth/register';
-
+// Images
+import LoginBack from '../../assets/image/AgentLogin.jpg'
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -67,7 +68,12 @@ export default function Register() {
   const mdUp = useResponsive('up', 'md');
 
   return (
-    <Page title="Register">
+    <Page title="Register"  sx={{
+      backgroundImage: `url(${LoginBack})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover'
+    }}> 
+      
       <RootStyle>
         <HeaderStyle>
           <Logo />
@@ -81,7 +87,7 @@ export default function Register() {
           )}
         </HeaderStyle>
 
-        {mdUp && (
+        {/* {mdUp && (
           <SectionStyle>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
               Manage the job more effectively with Minimal
@@ -91,7 +97,7 @@ export default function Register() {
               src="https://minimal-assets-api.vercel.app/assets/illustrations/illustration_register.png"
             />
           </SectionStyle>
-        )}
+        )} */}
 
         <Container>
           <ContentStyle>
@@ -116,7 +122,7 @@ export default function Register() {
             <RegisterForm />
 
             <Typography variant="body2" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
-              By registering, I agree to Minimal&nbsp;
+              By registering, I agree to Sale Team Tracker&nbsp;
               <Link underline="always" color="text.primary" href="#">
                 Terms of Service
               </Link>

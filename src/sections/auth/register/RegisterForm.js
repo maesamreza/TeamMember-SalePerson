@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
-
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,6 +11,8 @@ import { LoadingButton } from '@mui/lab';
 // hooks
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
+// utli
+import axios from '../../../utils/axios';
 // components
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
@@ -18,38 +20,40 @@ import { FormProvider, RHFTextField } from '../../../components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const { register } = useAuth();
+  const navigate = useNavigate();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const isMountedRef = useIsMountedRef();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().required('FirstName is required'),
-    lastName: Yup.string().required('LastName is required'),
-    email: Yup.string().required('Email is required').email(),
-    password: Yup.string().required('Password is required'),
-    confirmpassword: Yup.string().required('Confirm Password is required'),
-    picture: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
-    city: Yup.string().required('Password is required'),
-    country: Yup.string().required('Password is required'),
-    phone: Yup.string().required('Password is required'),
-    state: Yup.string().required('Confirm Password is required'),
-    agentId: Yup.string().required('Confirm Password is required'),
+    firstName: Yup.string().required('firstName is required'),
+    lastName: Yup.string().required('lastName is required'),
+    email: Yup.string().required('email is required'),
+    agentEmail: Yup.string().required('agentEmail is required'),
+    password: Yup.string().required('password is required'),
+    confirmpassword: Yup.string().required('confirmpassword is required'),
+    city: Yup.string().required('city is required'),
+    country: Yup.string().required('country is required'),
+    phone: Yup.string().required('phone is required'),
+    state: Yup.string().required('state is required'),
+    
   });
 
   const defaultValues = {
     firstName: '',
     lastName: '',
     email: '',
+    agentEmail:'',
     password: '',
     confirmpassword: '',
-    picture: '',
     city: '',
     country: '',
     phone: '',
     state: '',
-    agentId: '',
+   
   };
 
   const methods = useForm({
@@ -71,18 +75,47 @@ export default function RegisterForm() {
       formData.append("lastName", data.lastName)
       formData.append("firstName", data.firstName)
       formData.append("email", data.email)
+      formData.append("agentEmail", data.agentEmail)
       formData.append("password", data.password)
       formData.append("confirmpassword", data.confirmpassword)
-      formData.append("picture", data.picture)
       formData.append("city", data.city)
       formData.append("country", data.country)
       formData.append("phone", data.phone)
       formData.append("state", data.state)
       formData.append("agentId", data.agentId)
       const response = await axios.post(`api/register/seller`, formData);
-      const { message } = response.data;
+      const { message , inputErrors} = response.data;
       enqueueSnackbar(message);
-      navigate(PATH_DASHBOARD.general.saleApproval);
+      if(inputErrors.firstName){
+        enqueueSnackbar(inputErrors?.firstName,{ variant: 'error' }  );
+      }
+      if(inputErrors.lastName){
+        enqueueSnackbar(inputErrors?.lastName,{ variant: 'error' } );
+      }
+      if(inputErrors.email){
+        enqueueSnackbar(inputErrors?.email,{ variant: 'error' } );
+      }
+      if(inputErrors.agentEmail){
+        enqueueSnackbar(inputErrors?.agentEmail,{ variant: 'error' } );
+      }
+      if(inputErrors.password){
+        enqueueSnackbar(inputErrors?.password,{ variant: 'error' } );
+      }
+      if(inputErrors.confirmpassword){
+        enqueueSnackbar(inputErrors?.confirmpassword,{ variant: 'error' } );
+      }
+      if(inputErrors.city){
+        enqueueSnackbar(inputErrors?.city,{ variant: 'error' } );
+      }
+      if(inputErrors.country){
+        enqueueSnackbar(inputErrors?.country,{ variant: 'error' } );
+      }
+      if(inputErrors.phone){
+        enqueueSnackbar(inputErrors?.phone,{ variant: 'error' } );
+      }
+      if(inputErrors.state){
+        enqueueSnackbar(inputErrors?.state,{ variant: 'error' } );
+      }
     } catch (error) {
       console.error(error);
     }
@@ -97,10 +130,18 @@ export default function RegisterForm() {
           <RHFTextField name="firstName" label="First name" />
           <RHFTextField name="lastName" label="Last name" />
         </Stack>
-
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFTextField name="city" label="City" />
+          <RHFTextField name="country" label="Country" />
+        </Stack>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFTextField name="state" label="State" />
+          <RHFTextField name="phone" label="Phone" />
+        </Stack>
+        <RHFTextField name="agentEmail" label="A  gent Email address" />
         <RHFTextField name="email" label="Email address" />
-
-        <RHFTextField
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFTextField
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
@@ -114,6 +155,22 @@ export default function RegisterForm() {
             ),
           }}
         />
+        <RHFTextField
+          name="confirmpassword"
+          label="Confirm Password"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        </Stack>
+        
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Register

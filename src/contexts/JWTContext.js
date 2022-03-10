@@ -37,15 +37,6 @@ const handlers = {
     isAuthenticated: false,
     user: null,
   }),
-  REGISTER: (state, action) => {
-    const { user } = action.payload;
-
-    return {
-      ...state,
-      isAuthenticated: true,
-      user,
-    };
-  },
   RESETPASSWORD: (state, action) => {
     const { message } = action.payload;
     return {
@@ -60,14 +51,6 @@ const handlers = {
       message
     };
   },
-  GETALLSALESPERSON: (state, action) => {
-    const { message, salespersons } = action.payload;
-    return {
-      ...state,
-      message,
-      salespersons
-    };
-  },
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -77,10 +60,8 @@ const AuthContext = createContext({
   method: 'jwt',
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve(),
   resetpassword: () => Promise.resolve(),
   verifypassword: () => Promise.resolve(),
-  getallsaleman: () => Promise.resolve(),
 
 });
 
@@ -101,7 +82,7 @@ function AuthProvider({ children }) {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const response = await axios.get('/api/account/my-account');
+          const response = await axios.get('/api/user');
           const { user } = response.data;
 
           dispatch({
@@ -142,9 +123,6 @@ function AuthProvider({ children }) {
     });
     const { accessToken, user } = response.data;
     localStorage.setItem('UserID', user.id)
-    const ID = localStorage.getItem('UserID')
-    getallsaleman(ID);
-    console.log(user, accessToken)
     setSession(accessToken);
     dispatch({
       type: 'LOGIN',
@@ -154,26 +132,10 @@ function AuthProvider({ children }) {
     });
   };
 
-  const register = async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/register/seller', {
-      email,
-      password,
-      firstName,
-      lastName,
-    });
-    const { user } = response.data;
-
-    // window.localStorage.setItem('accessToken', accessToken);
-    // dispatch({
-    //   type: 'REGISTER',
-    //   payload: {
-    //     user,
-    //   },
-    // });
-  };
+  
   const resetpassword = async (email) => {
 
-    const response = await axios.post(`api/forgetpassword/admin`, { email });
+    const response = await axios.post(`api/forgetpassword/seller`, { email });
     const { message } = response.data;
     dispatch({
       type: 'RESETPASSWORD',
@@ -183,26 +145,13 @@ function AuthProvider({ children }) {
     });
   }
   const verifypassword = async (email, token, password, passwordconfirmation) => {
-    const response = await axios.post(`api/reset/password/admin`, { email, token, password, passwordconfirmation });
+    const response = await axios.post(`api/reset/password/seller`, { email, token, password, passwordconfirmation });
     const { message, error } = response.data;
     dispatch({
       type: 'VERIFYPASSWORD',
       payload: {
         message,
         error
-      },
-    });
-  }
-
-  const getallsaleman = async (ID) => {
-    const response = await axios.get(`api/data/sellers/${ID}`);
-    console.log(response)
-    const { message, salespersons } = response.data;  
-    dispatch({
-      type: 'GETALLSALESPERSON',
-      payload: {
-        message,
-        salespersons,
       },
     });
   }
@@ -226,11 +175,8 @@ function AuthProvider({ children }) {
         method: 'jwt',
         login,
         logout,
-        register,
         resetpassword,
         verifypassword,
-        getallsaleman,
-
       }}
     >
       {children}

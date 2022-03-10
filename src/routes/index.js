@@ -29,7 +29,7 @@ const Loadable = (Component) => (props) => {
 export default function Router() {
   return useRoutes([
     {
-      path: 'admin',
+      path: 'salesperson',
       children: [
         {
           path: 'login',
@@ -64,9 +64,6 @@ export default function Router() {
       children: [
         { element: <Navigate to={PATH_AFTER_LOGIN} replace />, index: true },
         { path: 'app', element: <GeneralApp /> },
-        { path: 'agentApproval', element: <AgentApproval /> },
-        { path: 'saleApproval', element: <SaleApproval /> },
-        { path: 'addSale', element: <AddNewSale /> },
         { path: 'analytics', element: <GeneralAnalytics /> },
         { path: 'banking', element: <GeneralBanking /> },
         { path: 'booking', element: <GeneralBooking /> },
@@ -165,9 +162,6 @@ const ResetPassword = Loadable(lazy(() => import('../pages/auth/ResetPassword'))
 const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 // Dashboard
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
-const AgentApproval = Loadable(lazy(() => import('../pages/dashboard/SalesPersonApproval')));
-const AddNewSale = Loadable(lazy(() => import('../pages/dashboard/AddNewSale')));
-const SaleApproval = Loadable(lazy(() => import('../pages/dashboard/SaleApproval')));
 const GeneralAnalytics = Loadable(lazy(() => import('../pages/dashboard/GeneralAnalytics')));
 const GeneralBanking = Loadable(lazy(() => import('../pages/dashboard/GeneralBanking')));
 const GeneralBooking = Loadable(lazy(() => import('../pages/dashboard/GeneralBooking')));

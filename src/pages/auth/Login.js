@@ -80,14 +80,14 @@ export default function Login() {
       <RootStyle>
         <HeaderStyle>
           <Logo />
-          {/* {smUp && (
+          {smUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
               Don’t have an account? {''}
               <Link variant="subtitle2" component={RouterLink} to={PATH_AUTH.register}>
                 Get started
               </Link>
             </Typography>
-          )} */}
+          )}
         </HeaderStyle>
 
         {/* {mdUp && (
@@ -107,7 +107,7 @@ export default function Login() {
             <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography variant="h4" gutterBottom>
-                  Sign in as Admin
+                  Sign in as SalesPerson
                 </Typography>
                 <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
               </Box>
