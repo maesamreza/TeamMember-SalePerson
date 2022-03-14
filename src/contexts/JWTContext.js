@@ -10,7 +10,7 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
-  salespersons: null
+  reports:[]
 };
 
 const handlers = {
@@ -51,6 +51,15 @@ const handlers = {
       message
     };
   },
+
+  UPDATEREPORT: (state, action) => {
+    const { message, reports } = action.payload;
+    return {
+      ...state,
+      reports,
+      message
+    };
+  },
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -83,7 +92,7 @@ function AuthProvider({ children }) {
           setSession(accessToken);
 
           const response = await axios.get('/api/user');
-          const { user } = response.data;
+          const user = response.data;
 
           dispatch({
             type: 'INITIALIZE',
@@ -123,7 +132,6 @@ function AuthProvider({ children }) {
     });
     const { accessToken, user } = response.data;
     localStorage.setItem('UserID', user.id)
-    setSession(accessToken);
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -132,7 +140,7 @@ function AuthProvider({ children }) {
     });
   };
 
-  
+
   const resetpassword = async (email) => {
 
     const response = await axios.post(`api/forgetpassword/seller`, { email });
@@ -156,6 +164,18 @@ function AuthProvider({ children }) {
     });
   }
 
+  const UpdateReports = async (id) => {
+    const response = await axios.get(`api/seller/report/${id}`);
+    const { message, reports } = response.data;
+
+    dispatch({
+      type: 'UPDATEREPORT',
+      payload: {
+        message,
+        reports
+      },
+    });
+  };
 
 
 
@@ -177,6 +197,7 @@ function AuthProvider({ children }) {
         logout,
         resetpassword,
         verifypassword,
+        UpdateReports,
       }}
     >
       {children}

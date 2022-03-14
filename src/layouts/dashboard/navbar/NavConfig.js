@@ -27,10 +27,10 @@ const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
-    // subheader: 'general',
+    subheader: 'general',
     items: [
-      // { title: 'DashBoard', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
-      // { title: 'Agent Approval', path: PATH_DASHBOARD.general.agentApproval, icon: ICONS.user },
+      { title: 'DashBoard', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
+      { title: 'SalesReport', path: PATH_DASHBOARD.general.salesReport, icon: ICONS.user },
       // { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
       // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },

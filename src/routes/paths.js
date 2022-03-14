@@ -34,9 +34,9 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   general: {
     app: path(ROOTS_DASHBOARD, '/app'),
-    agentApproval: path(ROOTS_DASHBOARD, '/agentApproval'),
-    saleApproval: path(ROOTS_DASHBOARD, '/saleApproval'),
-    addNewSale: path(ROOTS_DASHBOARD, '/addSale'),
+    salesReport: path(ROOTS_DASHBOARD, '/salesReport'),
+    addnewreport: path(ROOTS_DASHBOARD, '/addnewreport'),
+    updatereport: path(ROOTS_DASHBOARD, '/updatereport'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),
