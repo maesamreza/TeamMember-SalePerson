@@ -132,6 +132,7 @@ function AuthProvider({ children }) {
     });
     const { accessToken, user } = response.data;
     localStorage.setItem('UserID', user.id)
+    setSession(accessToken);
     dispatch({
       type: 'LOGIN',
       payload: {
