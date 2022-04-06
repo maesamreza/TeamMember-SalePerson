@@ -2,6 +2,7 @@ import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import moment from 'moment';
 
 
 // @mui
@@ -21,6 +22,10 @@ import {
     TableContainer,
     TablePagination,
     Stack,
+    List,
+    ListItem,
+    ListItemText,
+    Box
 } from '@mui/material';
 import MUIDataTable from "mui-datatables";
 import { LoadingButton } from '@mui/lab';
@@ -56,7 +61,14 @@ export default function SalesApproval() {
     const { enqueueSnackbar } = useSnackbar();
     const { UpdateReports } = useAuth();
     const [AgentID, setAgentID] = useState(localStorage.getItem('AgentViewID'))
-
+    const [AnnualizedHealthPremium, setAnnualizedHealthPremium] = useState([])
+    const [AnnualizedLifePremium, setAnnualizedLifePremium] = useState([])
+    const [HealthApplications, setHealthApplications] = useState([])
+    const [LifeApplications, setLifeApplications] = useState([])
+    const [OtherFinancialServices, setOtherFinancialServices] = useState([])
+    const [RawNewAutoQuotes, setRawNewAutoQuotes] = useState([])
+    const [RawNewAutoWritten, setRawNewAutoWritten] = useState([])
+    const [TotalFireWritten, setTotalFireWritten] = useState([])
     useEffect(() => {
         try {
             GetAllSellerReport()
@@ -72,14 +84,30 @@ export default function SalesApproval() {
         const response = await axios.get(`api/seller/reports/${UserID}`);
         const { reports, message } = response.data;
         enqueueSnackbar(message);
-
         setData(reports)
+        const AHP = reports.map((e) => (e.AnnualizedHealthPremium))
+        const ALP = reports.map((e) => (e.AnnualizedLifePremium))
+        const HP = reports.map((e) => (e.HealthApplications))
+        const LP = reports.map((e) => (e.LifeApplications))
+        const OFS = reports.map((e) => (e.OtherFinancialServices))
+        const RNAQ = reports.map((e) => (e.RawNewAutoQuotes))
+        const RNAW = reports.map((e) => (e.RawNewAutoWritten))
+        const TFW = reports.map((e) => (e.OtherFinancialServices))
+        setAnnualizedHealthPremium(AHP)
+        setAnnualizedLifePremium(ALP)
+        setHealthApplications(HP)
+        setLifeApplications(LP)
+        setOtherFinancialServices(OFS)
+        setRawNewAutoQuotes(RNAQ)
+        setRawNewAutoWritten(RNAW)
+        setTotalFireWritten(TFW)
+
     }
 
     const SalePersonReportUpadte = async (e) => {
         const IDs = e;
         UpdateReports(IDs);
-        localStorage.setItem('RepUpID',IDs);
+        localStorage.setItem('RepUpID', IDs);
         navigate(PATH_DASHBOARD.general.updatereport);
         // const response = await axios.get(`api/seller/report/${IDs}`);
         // const { message,reports } = response.data;
@@ -98,16 +126,23 @@ export default function SalesApproval() {
     }
     const columns = [
         {
-            name: "id",
-            label: "ID",
+            name: "created_at",
+            label: "Date",
             options: {
                 filter: true,
                 sort: true,
+                customBodyRender: (value, row) => {
+                    return (
+                        <>
+                            {moment(value).format('D MMMM YYYY')}
+                        </>
+                    );
+                }
             }
         },
         {
             name: "AnnualizedHealthPremium",
-            label: "Annualized Health Premium",
+            label: "AnnualizedHealthPremium",
             options: {
                 filter: true,
                 sort: true,
@@ -115,7 +150,7 @@ export default function SalesApproval() {
         },
         {
             name: "AnnualizedLifePremium",
-            label: "Annualized Life Premium",
+            label: "AnnualizedLifePremium",
             options: {
                 filter: true,
                 sort: true,
@@ -123,7 +158,7 @@ export default function SalesApproval() {
         },
         {
             name: "HealthApplications",
-            label: "Health Applications",
+            label: "HealthApplications",
             options: {
                 filter: true,
                 sort: true,
@@ -131,7 +166,7 @@ export default function SalesApproval() {
         },
         {
             name: "LifeApplications",
-            label: "Life Applications",
+            label: "LifeApplications",
             options: {
                 filter: true,
                 sort: true,
@@ -139,7 +174,7 @@ export default function SalesApproval() {
         },
         {
             name: "OtherFinancialServices",
-            label: "Other Financial Services",
+            label: "OtherFinancialServices",
             options: {
                 filter: true,
                 sort: true,
@@ -147,7 +182,7 @@ export default function SalesApproval() {
         },
         {
             name: "RawNewAutoQuotes",
-            label: "Raw New Auto Quotes",
+            label: "RawNewAutoQuotes",
             options: {
                 filter: true,
                 sort: true,
@@ -155,7 +190,7 @@ export default function SalesApproval() {
         },
         {
             name: "RawNewAutoWritten",
-            label: "Raw New Auto Written",
+            label: "RawNewAutoWritten",
             options: {
                 filter: true,
                 sort: true,
@@ -163,7 +198,7 @@ export default function SalesApproval() {
         },
         {
             name: "TotalFireWritten",
-            label: "Total Fire Written",
+            label: "TotalFireWritten",
             options: {
                 filter: true,
                 sort: true,
@@ -193,18 +228,19 @@ export default function SalesApproval() {
     const options = {
         filterType: "dropdown",
         responsive: "scroll",
-        selectableRows: true
+        selectableRows: false,
+
     };
 
     const [data, setData] = useState([]);
 
 
     return (
-        <Page title="SalePerson">
+        <Page title="">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <Grid>
                     <HeaderBreadcrumbs
-                        heading="SalesPerson Reports"
+                        heading="Sales Person Reports"
                         links={[
                             { name: 'Dashboard', href: PATH_DASHBOARD.root },
                             { name: 'Reports' },
@@ -222,13 +258,52 @@ export default function SalesApproval() {
                     />
 
                     <Card>
+                        <Box
+                            sx={{
+                                p:3,
+                                display: 'grid',
+                                columnGap: 2,
+                                rowGap: 3,
+                                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                            }}
+                        >
+                            <List>
+                                <ListItem>
+                                    <ListItemText primary="Annualized Health Premium" secondary={AnnualizedHealthPremium.reduce((a, b) => a + b, 0)}/>
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Annualized Life Premium"  secondary={AnnualizedLifePremium.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Health Applications"  secondary={HealthApplications.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Life Applications"  secondary={LifeApplications.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                            </List>
+                            <List>
+                                <ListItem>
+                                    <ListItemText primary="Other Financial Services"  secondary={OtherFinancialServices.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Raw New Auto Quotes" secondary={RawNewAutoQuotes.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Raw New Auto Written"  secondary={RawNewAutoWritten.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText primary="Total Fire Written"  secondary={TotalFireWritten.reduce((a, b) => a + b, 0)} />
+                                </ListItem>
+                            </List>
+                        </Box>
+
                         {data !== null ?
                             <MUIDataTable
-                                title={"SalesPerson"}
+                                title={"Sales Person Report"}
                                 data={data}
                                 columns={columns}
                                 options={options}
-                            /> : 'No SalePerson'}
+                            /> : 'No Sale Person'}
                     </Card>
                 </Grid>
             </Container>

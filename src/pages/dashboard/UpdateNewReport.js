@@ -58,7 +58,7 @@ export default function SalesApproval() {
 
 
     return (
-        <Page title="SalePerson">
+        <Page title="">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <Grid>
                     <Card>

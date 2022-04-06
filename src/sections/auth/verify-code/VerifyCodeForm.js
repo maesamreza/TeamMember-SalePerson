@@ -14,7 +14,8 @@ import Iconify from '../../../components/Iconify';
 // Hook
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 import useAuth from '../../../hooks/useAuth';
-
+// utli
+import axios from '../../../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -53,8 +54,12 @@ export default function VerifyCodeForm() {
   const onSubmit = async (data) => {
     console.log(data)
     try {
-      await verifypassword(data.email, data.token, data.password, data.passwordconfirmation);
-      // console.log('code:', Object.values(data).join(''));
+      const formData = new FormData();
+      formData.append("email", data.email)
+      formData.append("token", data.token)
+      formData.append("password", data.password)
+      formData.append("passwordconfirmation", data.passwordconfirmation)
+      const response = await axios.post(`api/reset/password/seller`, formData);
       enqueueSnackbar('Password Change');
       // navigate(PATH_CUSTOMER_AUTH.root, { replace: true });
     } catch (error) {

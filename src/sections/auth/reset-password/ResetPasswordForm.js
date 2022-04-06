@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 // @mui
 import { Stack } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// utli
+import axios from '../../../utils/axios';
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 import useAuth from '../../../hooks/useAuth';
@@ -39,7 +41,9 @@ export default function ResetPasswordForm({ onSent, onGetEmail }) {
 
   const onSubmit = async (data) => {
     try {
-      await resetpassword(data.email);
+      const formData = new FormData();
+      formData.append("email", data.email)
+      const response = await axios.post(`api/forgetpassword/seller`, formData);
       if (isMountedRef.current) {
         onSent();
         onGetEmail(data.email);

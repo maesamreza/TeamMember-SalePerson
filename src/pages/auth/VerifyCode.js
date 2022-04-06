@@ -6,6 +6,7 @@ import { Box, Button, Link, Container, Typography } from '@mui/material';
 import LogoOnlyLayout from '../../layouts/LogoOnlyLayout';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
+
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -59,12 +60,12 @@ export default function VerifyCode() {
               <VerifyCodeForm />
             </Box>
 
-            <Typography variant="body2" align="center">
+            {/* <Typography variant="body2" align="center">
               Don’t have a code? &nbsp;
               <Link variant="subtitle2" underline="none" onClick={() => { }}>
                 Resend code
               </Link>
-            </Typography>
+            </Typography> */}
           </Box>
         </Container>
       </RootStyle>

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -15,7 +15,7 @@ import useIsMountedRef from '../../../hooks/useIsMountedRef';
 import axios from '../../../utils/axios';
 // components
 import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFTextField } from '../../../components/hook-form';
+import { FormProvider, RHFTextField, RHFSelect } from '../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -39,21 +39,21 @@ export default function RegisterForm() {
     country: Yup.string().required('country is required'),
     phone: Yup.string().required('phone is required'),
     state: Yup.string().required('state is required'),
-    
+
   });
 
   const defaultValues = {
     firstName: '',
     lastName: '',
     email: '',
-    agentEmail:'',
+    agentEmail: '',
     password: '',
     confirmpassword: '',
     city: '',
     country: '',
     phone: '',
     state: '',
-   
+
   };
 
   const methods = useForm({
@@ -68,6 +68,21 @@ export default function RegisterForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = methods;
+  useEffect(() => {
+    Agents()
+  }, [])
+  const [agent, setAgent] = useState([])
+  const [Show, setShow] = useState(false)
+  const Agents = async () => {
+    try {
+      const response = await axios.get(`api/get/agents`);
+      const { agents } = response.data;
+      setAgent(agents)
+      setShow(true)
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -84,37 +99,37 @@ export default function RegisterForm() {
       formData.append("state", data.state)
       formData.append("agentId", data.agentId)
       const response = await axios.post(`api/register/seller`, formData);
-      const { message , inputErrors} = response.data;
+      const { message, inputErrors } = response.data;
       enqueueSnackbar(message);
-      if(inputErrors.firstName){
-        enqueueSnackbar(inputErrors?.firstName,{ variant: 'error' }  );
+      if (inputErrors.firstName) {
+        enqueueSnackbar(inputErrors?.firstName, { variant: 'error' });
       }
-      if(inputErrors.lastName){
-        enqueueSnackbar(inputErrors?.lastName,{ variant: 'error' } );
+      if (inputErrors.lastName) {
+        enqueueSnackbar(inputErrors?.lastName, { variant: 'error' });
       }
-      if(inputErrors.email){
-        enqueueSnackbar(inputErrors?.email,{ variant: 'error' } );
+      if (inputErrors.email) {
+        enqueueSnackbar(inputErrors?.email, { variant: 'error' });
       }
-      if(inputErrors.agentEmail){
-        enqueueSnackbar(inputErrors?.agentEmail,{ variant: 'error' } );
+      if (inputErrors.agentEmail) {
+        enqueueSnackbar(inputErrors?.agentEmail, { variant: 'error' });
       }
-      if(inputErrors.password){
-        enqueueSnackbar(inputErrors?.password,{ variant: 'error' } );
+      if (inputErrors.password) {
+        enqueueSnackbar(inputErrors?.password, { variant: 'error' });
       }
-      if(inputErrors.confirmpassword){
-        enqueueSnackbar(inputErrors?.confirmpassword,{ variant: 'error' } );
+      if (inputErrors.confirmpassword) {
+        enqueueSnackbar(inputErrors?.confirmpassword, { variant: 'error' });
       }
-      if(inputErrors.city){
-        enqueueSnackbar(inputErrors?.city,{ variant: 'error' } );
+      if (inputErrors.city) {
+        enqueueSnackbar(inputErrors?.city, { variant: 'error' });
       }
-      if(inputErrors.country){
-        enqueueSnackbar(inputErrors?.country,{ variant: 'error' } );
+      if (inputErrors.country) {
+        enqueueSnackbar(inputErrors?.country, { variant: 'error' });
       }
-      if(inputErrors.phone){
-        enqueueSnackbar(inputErrors?.phone,{ variant: 'error' } );
+      if (inputErrors.phone) {
+        enqueueSnackbar(inputErrors?.phone, { variant: 'error' });
       }
-      if(inputErrors.state){
-        enqueueSnackbar(inputErrors?.state,{ variant: 'error' } );
+      if (inputErrors.state) {
+        enqueueSnackbar(inputErrors?.state, { variant: 'error' });
       }
     } catch (error) {
       console.error(error);
@@ -138,39 +153,48 @@ export default function RegisterForm() {
           <RHFTextField name="state" label="State" />
           <RHFTextField name="phone" label="Phone" />
         </Stack>
-        <RHFTextField name="agentEmail" label="A  gent Email address" />
+        <RHFSelect name="agentEmail" label="Agent" >
+          <option value='' />
+          {!Show ? <option value='' >No Agent Found</option> :
+                  agent.map((option) => (
+                    <option key={option.id} value={option.email}>
+                      {option.name}
+                    </option>
+                  ))}
+        </RHFSelect>
+        
         <RHFTextField name="email" label="Email address" />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <RHFTextField
-          name="confirmpassword"
-          label="Confirm Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <RHFTextField
+            name="confirmpassword"
+            label="Confirm Password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" onClick={() => setShowPassword(!showPassword)}>
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
         </Stack>
-        
+
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Register

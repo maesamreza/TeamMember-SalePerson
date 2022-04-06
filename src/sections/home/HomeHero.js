@@ -88,7 +88,7 @@ export default function HomeHero() {
           <ContentStyle>
             <m.div variants={varFade().inRight}>
               <Typography variant="h1" sx={{ color: 'common.white' }}>
-                SalePerson Login
+                Sale Person Login
               </Typography>
             </m.div>
 
