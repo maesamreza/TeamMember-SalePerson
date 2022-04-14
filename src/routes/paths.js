@@ -37,6 +37,7 @@ export const PATH_DASHBOARD = {
     salesReport: path(ROOTS_DASHBOARD, '/salesReport'),
     addnewreport: path(ROOTS_DASHBOARD, '/addnewreport'),
     updatereport: path(ROOTS_DASHBOARD, '/updatereport'),
+    rating: path(ROOTS_DASHBOARD, '/rating'),
     ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
     analytics: path(ROOTS_DASHBOARD, '/analytics'),
     banking: path(ROOTS_DASHBOARD, '/banking'),

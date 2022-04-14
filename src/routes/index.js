@@ -67,7 +67,7 @@ export default function Router() {
         { path: 'salesReport', element: <SalesReport /> },
         { path: 'addnewreport', element: <AddnewReport /> },
         { path: 'updatereport', element: <UpdateReport /> },
-
+        { path: 'rating', element: <Rating /> },
         {
           path: 'e-commerce',
           children: [
@@ -164,6 +164,10 @@ const VerifyCode = Loadable(lazy(() => import('../pages/auth/VerifyCode')));
 const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')));
 const SalesReport = Loadable(lazy(() => import('../pages/dashboard/SalesReport')));
 const AddnewReport = Loadable(lazy(() => import('../pages/dashboard/AddNewReport')));
+const Rating = Loadable(lazy(() => import('../pages/dashboard/Rating')));
+
+
+
 const UpdateReport = Loadable(lazy(() => import('../pages/dashboard/UpdateNewReport')));
 const EcommerceShop = Loadable(lazy(() => import('../pages/dashboard/EcommerceShop')));
 const EcommerceProductDetails = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductDetails')));

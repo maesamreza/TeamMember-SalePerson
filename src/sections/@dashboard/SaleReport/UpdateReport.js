@@ -97,8 +97,8 @@ export default function UpdateForm() {
             <Grid container spacing={3}>
 
                 <Grid item xs={12} md={12}>
-                    <Typography variant='h6' color='common.white'>
-                        Add New Agent
+                    <Typography variant='h6' color='common.white' sx={{ p: 3 }}>
+                       Update
                     </Typography>
                     <Card sx={{ p: 3 }}>
                         <Box

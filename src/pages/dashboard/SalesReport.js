@@ -25,7 +25,11 @@ import {
     List,
     ListItem,
     ListItemText,
-    Box
+    Box,
+    MenuItem,
+    FormControl,
+    TextField,
+    InputAdornment
 } from '@mui/material';
 import MUIDataTable from "mui-datatables";
 import { LoadingButton } from '@mui/lab';
@@ -41,6 +45,7 @@ import useAuth from '../../hooks/useAuth';
 // utils
 import axios from '../../utils/axios';
 // components
+import LoadingScreen from '../../components/LoadingScreen';
 import Page from '../../components/Page';
 import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
@@ -69,6 +74,10 @@ export default function SalesApproval() {
     const [RawNewAutoQuotes, setRawNewAutoQuotes] = useState([])
     const [RawNewAutoWritten, setRawNewAutoWritten] = useState([])
     const [TotalFireWritten, setTotalFireWritten] = useState([])
+    const [StartDate, setStartDate] = useState('')
+    const [EndDate, setEndDate] = useState('')
+    const [showData, setShowData] = useState(false)
+
     useEffect(() => {
         try {
             GetAllSellerReport()
@@ -80,7 +89,7 @@ export default function SalesApproval() {
     const UserID = localStorage.getItem('UserID');
 
     const GetAllSellerReport = async () => {
-
+        setShowData(false)
         const response = await axios.get(`api/seller/reports/${UserID}`);
         const { reports, message } = response.data;
         enqueueSnackbar(message);
@@ -101,9 +110,44 @@ export default function SalesApproval() {
         setRawNewAutoQuotes(RNAQ)
         setRawNewAutoWritten(RNAW)
         setTotalFireWritten(TFW)
-
+        setTimeout(() => {
+            setShowData(true)
+        }, 1000);
     }
 
+    const StartDateState = (event) => {
+        setStartDate(event.target.value);
+    }
+    const EndDateState = (event) => {
+        setEndDate(event.target.value);
+    }
+    const FitlerReports = async () => {
+        setShowData(false)
+        const response = await axios.get(`api/seller/reports/${UserID}?startdate=${StartDate}&enddate=${EndDate}`);
+        const { message, reports } = response.data;
+        enqueueSnackbar(message);
+        setData(reports)
+        const AHP = reports.map((e) => (e.AnnualizedHealthPremium))
+        const ALP = reports.map((e) => (e.AnnualizedLifePremium))
+        const HP = reports.map((e) => (e.HealthApplications))
+        const LP = reports.map((e) => (e.LifeApplications))
+        const OFS = reports.map((e) => (e.OtherFinancialServices))
+        const RNAQ = reports.map((e) => (e.RawNewAutoQuotes))
+        const RNAW = reports.map((e) => (e.RawNewAutoWritten))
+        const TFW = reports.map((e) => (e.OtherFinancialServices))
+        setAnnualizedHealthPremium(AHP)
+        setAnnualizedLifePremium(ALP)
+        setHealthApplications(HP)
+        setLifeApplications(LP)
+        setOtherFinancialServices(OFS)
+        setRawNewAutoQuotes(RNAQ)
+        setRawNewAutoWritten(RNAW)
+        setTotalFireWritten(TFW)
+
+        setTimeout(() => {
+            setShowData(true)
+        }, 1000);
+    }
     const SalePersonReportUpadte = async (e) => {
         const IDs = e;
         UpdateReports(IDs);
@@ -141,46 +185,6 @@ export default function SalesApproval() {
             }
         },
         {
-            name: "AnnualizedHealthPremium",
-            label: "AnnualizedHealthPremium",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "AnnualizedLifePremium",
-            label: "AnnualizedLifePremium",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "HealthApplications",
-            label: "HealthApplications",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "LifeApplications",
-            label: "LifeApplications",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
-            name: "OtherFinancialServices",
-            label: "OtherFinancialServices",
-            options: {
-                filter: true,
-                sort: true,
-            }
-        },
-        {
             name: "RawNewAutoQuotes",
             label: "RawNewAutoQuotes",
             options: {
@@ -205,17 +209,60 @@ export default function SalesApproval() {
             }
         },
         {
-            name: "Actions",
+            name: "LifeApplications",
+            label: "LifeApplications",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "AnnualizedLifePremium",
+            label: "AnnualizedLifePremium",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "HealthApplications",
+            label: "HealthApplications",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "AnnualizedHealthPremium",
+            label: "AnnualizedHealthPremium",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+        {
+            name: "OtherFinancialServices",
+            label: "OtherFinancialServices",
+            options: {
+                filter: true,
+                sort: true,
+            }
+        },
+
+
+        {
+            name: "id",
+            label: "Actions",
             options: {
                 customBodyRender: (value, row) => {
                     return (
                         <>
 
-                            <LoadingButton size="small" variant="contained" style={{ margin: '10px' }} onClick={(e) => { SalePersonReportUpadte(row.rowData[0]) }} >
+                            <LoadingButton size="small" variant="contained" style={{ margin: '10px' }} onClick={(e) => { SalePersonReportUpadte(value) }} >
                                 Update
                             </LoadingButton>
 
-                            <LoadingButton size="small" variant="contained" style={{ margin: '10px' }} onClick={(e) => { SalePersonDeleteReport(row.rowData[0]) }} >
+                            <LoadingButton size="small" variant="contained" style={{ margin: '10px' }} onClick={(e) => { SalePersonDeleteReport(value) }} >
                                 Delete
                             </LoadingButton>
 
@@ -260,7 +307,7 @@ export default function SalesApproval() {
                     <Card>
                         <Box
                             sx={{
-                                p:3,
+                                p: 3,
                                 display: 'grid',
                                 columnGap: 2,
                                 rowGap: 3,
@@ -269,41 +316,59 @@ export default function SalesApproval() {
                         >
                             <List>
                                 <ListItem>
-                                    <ListItemText primary="Annualized Health Premium" secondary={AnnualizedHealthPremium.reduce((a, b) => a + b, 0)}/>
+                                    <ListItemText primary="Raw New Auto Quotes" secondary={RawNewAutoQuotes.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                                 <ListItem>
-                                    <ListItemText primary="Annualized Life Premium"  secondary={AnnualizedLifePremium.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Raw New Auto Written" secondary={RawNewAutoWritten.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                                 <ListItem>
-                                    <ListItemText primary="Health Applications"  secondary={HealthApplications.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Total Fire Written" secondary={TotalFireWritten.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                                 <ListItem>
-                                    <ListItemText primary="Life Applications"  secondary={LifeApplications.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Life Applications" secondary={LifeApplications.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                             </List>
                             <List>
                                 <ListItem>
-                                    <ListItemText primary="Other Financial Services"  secondary={OtherFinancialServices.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Annualized Life Premium" secondary={AnnualizedLifePremium.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                                 <ListItem>
-                                    <ListItemText primary="Raw New Auto Quotes" secondary={RawNewAutoQuotes.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Health Applications" secondary={HealthApplications.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                                 <ListItem>
-                                    <ListItemText primary="Raw New Auto Written"  secondary={RawNewAutoWritten.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Annualized Health Premium" secondary={AnnualizedHealthPremium.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                                 <ListItem>
-                                    <ListItemText primary="Total Fire Written"  secondary={TotalFireWritten.reduce((a, b) => a + b, 0)} />
+                                    <ListItemText primary="Other Financial Services" secondary={OtherFinancialServices.reduce((a, b) => a + b, 0)} />
                                 </ListItem>
                             </List>
                         </Box>
+                        <Stack direction="row-reverse" >
 
-                        {data !== null ?
+                            <Button sx={{ m: 4, width: 20, height: 50 }} variant='outlined' onClick={(e) => { FitlerReports() }}>Search</Button>
+
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                Start Date  <TextField
+                                    type='date'
+                                    placeholder="Start Date"
+                                    onChange={(e) => { StartDateState(e) }}
+                                />
+                            </FormControl>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                End Date<TextField
+                                    type='date'
+                                    placeholder="End Date"
+                                    onChange={(e) => { EndDateState(e) }}
+                                />
+                            </FormControl>
+                        </Stack>
+                        {showData ?
                             <MUIDataTable
                                 title={"Sales Person Report"}
                                 data={data}
                                 columns={columns}
                                 options={options}
-                            /> : 'No Sale Person'}
+                            /> : <LoadingScreen />}
                     </Card>
                 </Grid>
             </Container>
