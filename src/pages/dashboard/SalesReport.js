@@ -346,14 +346,6 @@ export default function SalesApproval() {
                         <Stack direction="row-reverse" >
 
                             <Button sx={{ m: 4, width: 20, height: 50 }} variant='outlined' onClick={(e) => { FitlerReports() }}>Search</Button>
-
-                            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                Start Date  <TextField
-                                    type='date'
-                                    placeholder="Start Date"
-                                    onChange={(e) => { StartDateState(e) }}
-                                />
-                            </FormControl>
                             <FormControl sx={{ m: 1, minWidth: 120 }}>
                                 End Date<TextField
                                     type='date'
@@ -361,6 +353,14 @@ export default function SalesApproval() {
                                     onChange={(e) => { EndDateState(e) }}
                                 />
                             </FormControl>
+                            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                Start Date  <TextField
+                                    type='date'
+                                    placeholder="Start Date"
+                                    onChange={(e) => { StartDateState(e) }}
+                                />
+                            </FormControl>
+                           
                         </Stack>
                         {showData ?
                             <MUIDataTable
