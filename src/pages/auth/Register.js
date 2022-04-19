@@ -103,10 +103,10 @@ export default function Register() {
           <ContentStyle>
             <Box sx={{ mb: 5, display: 'flex', alignItems: 'center' }}>
               <Box sx={{ flexGrow: 1 }}>
-                {/* <Typography variant="h4" gutterBottom>
-                  Get started absolutely free.
-                </Typography> */}
-                <Typography sx={{ color: 'text.secondary' }}>Free forever. No credit card needed.</Typography>
+                <Typography variant="h4" gutterBottom>
+Sign In
+                </Typography>
+                {/* <Typography sx={{ color: 'text.secondary' }}>Sign In </Typography> */}
               </Box>
               <Tooltip title={capitalCase(method)}>
                 <>
