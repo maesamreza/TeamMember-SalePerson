@@ -36,7 +36,7 @@ export default function RegisterForm() {
     password: Yup.string().required('password is required'),
     confirmpassword: Yup.string().required('confirmpassword is required'),
     city: Yup.string().required('city is required'),
-    country: Yup.string().required('country is required'),
+    // country: Yup.string().required('country is required'),
     phone: Yup.string().required('phone is required'),
     state: Yup.string().required('state is required'),
 
@@ -50,7 +50,7 @@ export default function RegisterForm() {
     password: '',
     confirmpassword: '',
     city: '',
-    country: '',
+    // country: '',
     phone: '',
     state: '',
 
@@ -147,7 +147,7 @@ export default function RegisterForm() {
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField name="city" label="City" />
-          <RHFTextField name="country" label="Country" />
+          {/* <RHFTextField name="country" label="Country" /> */}
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField name="state" label="State" />
