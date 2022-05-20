@@ -31,8 +31,8 @@ const navConfig = [
     items: [
       { title: 'Dashboard', path: PATH_DASHBOARD.general.app, icon: ICONS.dashboard },
       { title: 'Sales Report', path: PATH_DASHBOARD.general.salesReport, icon: ICONS.user },
-      { title: 'Rating', path: PATH_DASHBOARD.general.rating, icon: ICONS.analytics },
-      // { title: 'analytics', path: PATH_DASHBOARD.general.analytics, icon: ICONS.analytics },
+      { title: 'Ranking', path: PATH_DASHBOARD.general.rating, icon: ICONS.analytics },
+      { title: 'Group', path: PATH_DASHBOARD.general.group, icon: ICONS.chat },
       // { title: 'banking', path: PATH_DASHBOARD.general.banking, icon: ICONS.banking },
       // { title: 'booking', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
     ],

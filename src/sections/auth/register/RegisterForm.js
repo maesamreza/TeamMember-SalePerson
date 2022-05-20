@@ -69,7 +69,8 @@ export default function RegisterForm() {
     formState: { errors, isSubmitting },
   } = methods;
   useEffect(() => {
-    Agents()
+    Agents();
+    State()
   }, [])
   const [agent, setAgent] = useState([])
   const [Show, setShow] = useState(false)
@@ -79,6 +80,18 @@ export default function RegisterForm() {
       const { agents } = response.data;
       setAgent(agents)
       setShow(true)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const [state, setState] = useState([])
+  const [Show2, setShow2] = useState(false)
+  const State = async () => {
+    try {
+      const response = await axios.get(`api/get/states`);
+      const { states } = response.data;
+      setState(states)
+      setShow2(true)
     } catch (error) {
       console.error(error);
     }
@@ -148,10 +161,19 @@ export default function RegisterForm() {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField name="city" label="City" />
           {/* <RHFTextField name="country" label="Country" /> */}
+          <RHFTextField name="phone" label="Phone" />
         </Stack>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="state" label="State" />
-          <RHFTextField name="phone" label="Phone" />
+         <RHFSelect name="state" label="State" >
+          <option value='' />
+          {!Show2 ? <option value='' >No State Found</option> :
+                  state.map((option) => (
+                    <option key={option.id} value={option.state}>
+                      {option.state} ({option.code})
+                    </option>
+                  ))}
+        </RHFSelect>
+        
         </Stack>
         <RHFSelect name="agentEmail" label="Agent" >
           <option value='' />

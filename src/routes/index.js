@@ -68,6 +68,9 @@ export default function Router() {
         { path: 'addnewreport', element: <AddnewReport /> },
         { path: 'updatereport', element: <UpdateReport /> },
         { path: 'rating', element: <Rating /> },
+        { path: 'group', element: <Group /> },
+        { path: 'group/:id', element: <Group /> },
+
         {
           path: 'e-commerce',
           children: [
@@ -165,6 +168,7 @@ const GeneralApp = Loadable(lazy(() => import('../pages/dashboard/GeneralApp')))
 const SalesReport = Loadable(lazy(() => import('../pages/dashboard/SalesReport')));
 const AddnewReport = Loadable(lazy(() => import('../pages/dashboard/AddNewReport')));
 const Rating = Loadable(lazy(() => import('../pages/dashboard/Rating')));
+const Group = Loadable(lazy(() => import('../pages/dashboard/Groups')));
 
 
 

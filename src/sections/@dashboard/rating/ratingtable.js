@@ -232,7 +232,7 @@ export default function SalesPacakges() {
                             <MenuItem value={'name'}>Name</MenuItem>
                             <MenuItem value={'email'}>Email</MenuItem>
                             <MenuItem value={'city'}>City</MenuItem>
-                            <MenuItem value={'country'}>Country</MenuItem>
+                            {/* <MenuItem value={'country'}>Country</MenuItem> */}
                             <MenuItem value={'phone'}>Phone</MenuItem>
                             <MenuItem value={'state'}>State</MenuItem>
                         </Select>
@@ -241,7 +241,7 @@ export default function SalesPacakges() {
 
                 {showData ?
                     <MUIDataTable
-                        title={"Rating"}
+                        title={"Ranking"}
                         data={data}
                         columns={columns}
                         options={options}
