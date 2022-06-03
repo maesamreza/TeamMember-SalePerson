@@ -139,10 +139,10 @@ export default function Group() {
 
 
   return (
-    <Page title="Chat">
+    <Page title="Group">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
-          heading="Chat"
+          heading="Group"
           links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Chat' }]}
         
         />

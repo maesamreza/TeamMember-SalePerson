@@ -104,7 +104,7 @@ export default function AddNewForm() {
                         >
                             <RHFTextField name="RawNewAutoQuotes" label="Raw New Auto Quotes" type='number' />
                             <RHFTextField name="RawNewAutoWritten" label="Raw New Auto Written" type='number' />
-                            <RHFTextField name="TotalFireWritten" label="Total FireW ritten" type='number' />
+                            <RHFTextField name="TotalFireWritten" label="Total Fire Written" type='number' />
                             <RHFTextField name="LifeApplications" label="Life Applications" type='number' />
                             <RHFTextField name="AnnualizedLifePremium" label="Annualized Life Premium" type='number' />
                             <RHFTextField name="HealthApplications" label="Health Applications" type='number' />

@@ -1,61 +1,83 @@
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// utils
-import axios from '../../../../utils/axios';
-// hooks
+import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+// Hooks
 import useAuth from '../../../../hooks/useAuth';
 // utils
-import { fData } from '../../../../utils/formatNumber';
+import axios from '../../../../utils/axios';
+// routes
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // _mock
 import { countries } from '../../../../_mock';
 // components
-import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import Label from '../../../../components/Label';
+import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral() {
+export default function UserUpdate() {
   const { enqueueSnackbar } = useSnackbar();
+  const userID = localStorage.getItem('UserID');
+useEffect(()=>{
+  State();
+},[])
 
-  const { user } = useAuth();
-  const userID = localStorage.getItem('UserID')
-
-  const UpdateUserSchema = Yup.object().shape({
-    agentId: userID,
-    firstName: Yup.string().required('Name is required'),
-    lastName: Yup.string().required('Name is required'),
-    state: Yup.string().required('Name is required'),
-    picture: Yup.mixed().test('required', 'picture is required', (value) => value !== ''),
+  const NewUserSchema = Yup.object().shape({
+    firstName: Yup.string().required('FirstName is required'),
+    lastName: Yup.string().required('LastName is required'),
+    picture: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
+    state: Yup.string().required('Confirm Password is required'),
   });
 
-  const defaultValues = {
-    agentId: userID,
-    firstName: '',
-    lastName: '',
-    state: '',
-    picture: ''
-  };
+  const defaultValues = useMemo(
+    () => ({
+      firstName: '',
+      lastName: '',
+      picture: '',
+      state: '',
+
+    }),
+
+  );
 
   const methods = useForm({
-    resolver: yupResolver(UpdateUserSchema),
+    resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
 
   const {
-    setValue,
+    watch,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
+  const values = watch();
+
   const onSubmit = async (data) => {
-  console.log(data)
+    try {
+      const formData = new FormData();
+      formData.append("lastName", data.lastName)
+      formData.append("firstName", data.firstName)
+      formData.append("picture", data.picture)
+      formData.append("state", data.state)
+      formData.append('agentId', userID)
+      const response = await axios.post(`api/update/profile/seller/${userID}`, formData);
+      const { message } = response.data;
+      enqueueSnackbar(message);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -72,33 +94,47 @@ export default function AccountGeneral() {
     },
     [setValue]
   );
+  const [state, setState] = useState([])
+  const [Show2, setShow2] = useState(false)
+  const State = async () => {
+    try {
+      const response = await axios.get(`api/get/states`);
+      const { states } = response.data;
+      setState(states)
+      setShow2(true)
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
-              name="picture"
-              accept="image/*"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.secondary',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
+          <Card sx={{ py: 10, px: 3 }}>
+
+            <Box sx={{ mb: 5 }}>
+              <RHFUploadAvatar
+                name="picture"
+                accept="image/*"
+                maxSize={3145728}
+                onDrop={handleDrop}
+                helperText={
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      mt: 2,
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.secondary',
+                    }}
+                  >
+                    Allowed *.jpeg, *.jpg, *.png, *.gif
+                  </Typography>
+                }
+              />
+            </Box>
 
           </Card>
         </Grid>
@@ -108,22 +144,27 @@ export default function AccountGeneral() {
             <Box
               sx={{
                 display: 'grid',
-                rowGap: 3,
                 columnGap: 2,
+                rowGap: 3,
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="firstName" label="First Name" />
-              <RHFTextField name="lastName" label="Last Name" />
-
-              <RHFTextField name="state" label="State" />
-             
+              <RHFTextField name="firstName" label="FirstName" />
+              <RHFTextField name="lastName" label="LastName" />
+              <RHFSelect name="state" label="State" >
+                <option value='' />
+                {!Show2 ? <option value='' >No State Found</option> :
+                  state.map((option) => (
+                    <option key={option.id} value={option.state}>
+                      {option.state} ({option.code})
+                    </option>
+                  ))}
+              </RHFSelect>
             </Box>
 
-            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
+                Create Sale Person
               </LoadingButton>
             </Stack>
           </Card>
