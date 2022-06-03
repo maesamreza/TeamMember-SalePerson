@@ -32,14 +32,14 @@ export default function UpdateForm() {
     console.log(useAuth());
 
     const NewUserSchema = Yup.object().shape({
-        RawNewAutoQuotes: Yup.string().required('RawNewAutoQuotes is required'),
-        RawNewAutoWritten: Yup.string().required('RawNewAutoWritten is required'),
-        TotalFireWritten: Yup.string().required('TotalFireWritten is required'),
-        LifeApplications: Yup.string().required('LifeApplications is required'),
-        AnnualizedLifePremium: Yup.string().required('AnnualizedLifePremium is required'),
-        HealthApplications: Yup.string().required('HealthApplications is required'),
-        AnnualizedHealthPremium: Yup.string().required('AnnualizedHealthPremiumis required'),
-        OtherFinancialServices: Yup.string().required('OtherFinancialServices is required'),
+        RawNewAutoQuotes: Yup.number().required('RawNewAutoQuotes is required').positive(),
+        RawNewAutoWritten: Yup.number().required('RawNewAutoWritten is required').positive(),
+        TotalFireWritten: Yup.number().required('TotalFireWritten is required').positive(),
+        LifeApplications: Yup.number().required('LifeApplications is required').positive(),
+        AnnualizedLifePremium: Yup.number().required('AnnualizedLifePremium is required').positive(),
+        HealthApplications: Yup.number().required('HealthApplications is required').positive(),
+        AnnualizedHealthPremium: Yup.number().required('AnnualizedHealthPremiumis required').positive(),
+        OtherFinancialServices: Yup.number().required('OtherFinancialServices is required').positive(),
     });
 
     const defaultValues = useMemo(

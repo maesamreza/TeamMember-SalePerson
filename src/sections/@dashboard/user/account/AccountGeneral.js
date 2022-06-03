@@ -69,7 +69,8 @@ useEffect(()=>{
       formData.append("firstName", data.firstName)
       formData.append("picture", data.picture)
       formData.append("state", data.state)
-      formData.append('agentId', userID)
+      formData.append('city', data.city)
+      formData.append('phone', data.phone)
       const response = await axios.post(`api/update/profile/seller/${userID}`, formData);
       const { message } = response.data;
       enqueueSnackbar(message);
@@ -155,16 +156,19 @@ useEffect(()=>{
                 <option value='' />
                 {!Show2 ? <option value='' >No State Found</option> :
                   state.map((option) => (
-                    <option key={option.id} value={option.state}>
+                    <option key={option.id} value={option.id}>
                       {option.state} ({option.code})
                     </option>
                   ))}
               </RHFSelect>
+              <RHFTextField name="city" label="City" />
+              <RHFTextField name="phone" label="Phone" />
+
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Create Sale Person
+               Update Profile
               </LoadingButton>
             </Stack>
           </Card>
