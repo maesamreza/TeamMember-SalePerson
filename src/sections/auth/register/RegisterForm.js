@@ -31,7 +31,7 @@ export default function RegisterForm() {
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().required('firstName is required'),
     lastName: Yup.string().required('lastName is required'),
-    email: Yup.string().required('email is required'),
+    email: Yup.string().required('email is required').matches(/(@statefarm.com)/),
     agentEmail: Yup.string().required('agentEmail is required'),
     password: Yup.string().required('password is required'),
     confirmpassword: Yup.string().required('confirmpassword is required'),
@@ -185,7 +185,7 @@ export default function RegisterForm() {
                   ))}
         </RHFSelect>
         
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label="Email address" helperText="email must match the following: @statefarm.com"/>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <RHFTextField
             name="password"
