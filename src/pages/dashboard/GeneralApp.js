@@ -158,7 +158,7 @@ export default function GeneralApp() {
 
           <Grid item xs={12} md={4}>
             <EcommerceWidgetSummary
-              title="AnnualizedLifePremium"
+              title="Annualized Life Premium"
               // percent={2.6}
               total={AnnualizedLifePremiumTotal}
               chartColor={theme.palette.primary.main}
@@ -178,7 +178,7 @@ export default function GeneralApp() {
 
           <Grid item xs={12} md={4}>
             <EcommerceWidgetSummary
-              title="Annualized ealth Premium"
+              title="Annualized Health Premium"
               // percent={2.6}
               total={AnnualizedHealthPremiumTotal}
               chartColor={theme.palette.primary.main}
