@@ -26,9 +26,11 @@ import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } fro
 export default function UserUpdate() {
   const { enqueueSnackbar } = useSnackbar();
   const userID = localStorage.getItem('UserID');
-useEffect(()=>{
-  State();
-},[])
+  useEffect(() => {
+    State();
+    Ratting();
+  }, [])
+  const [Ranking,setRanking]=useState('')
 
   const NewUserSchema = Yup.object().shape({
     firstName: Yup.string().required('FirstName is required'),
@@ -107,6 +109,11 @@ useEffect(()=>{
       console.error(error);
     }
   }
+  const Ratting = async () => {
+    const response = await axios.get(`api/seller/rating`);
+    const { Rating } = response.data;
+    setRanking(Rating?.ranking)
+  }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -135,6 +142,16 @@ useEffect(()=>{
                   </Typography>
                 }
               />
+              <Typography
+               sx={{
+                mt: 2,
+                mx: 'auto',
+                display: 'block',
+                textAlign: 'center',
+                color: 'text.secondary',
+              }}>
+              National Ranking: {Ranking}
+              </Typography>
             </Box>
 
           </Card>
@@ -168,7 +185,7 @@ useEffect(()=>{
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-               Update Profile
+                Update Profile
               </LoadingButton>
             </Stack>
           </Card>

@@ -27,14 +27,14 @@ export default function AddNewForm() {
     const { enqueueSnackbar } = useSnackbar();
 
     const NewUserSchema = Yup.object().shape({
-        RawNewAutoQuotes: Yup.number().required('RawNewAutoQuotes is required').positive(),
-        RawNewAutoWritten: Yup.number().required('RawNewAutoWritten is required').positive(),
-        TotalFireWritten: Yup.number().required('TotalFireWritten is required').positive(),
-        LifeApplications: Yup.number().required('LifeApplications is required').positive(),
-        AnnualizedLifePremium: Yup.number().required('AnnualizedLifePremium is required').positive(),
-        HealthApplications: Yup.number().required('HealthApplications is required').positive(),
-        AnnualizedHealthPremium: Yup.number().required('AnnualizedHealthPremiumis required').positive(),
-        OtherFinancialServices: Yup.number().required('OtherFinancialServices is required').positive(),
+        RawNewAutoQuotes: Yup.number().required('RawNewAutoQuotes is required').min(0),
+        RawNewAutoWritten: Yup.number().required('RawNewAutoWritten is required').min(0),
+        TotalFireWritten: Yup.number().required('TotalFireWritten is required').min(0),
+        LifeApplications: Yup.number().required('LifeApplications is required').min(0),
+        AnnualizedLifePremium: Yup.number().required('AnnualizedLifePremium is required').min(0),
+        HealthApplications: Yup.number().required('HealthApplications is required').min(0),
+        AnnualizedHealthPremium: Yup.number().required('AnnualizedHealthPremiumis required').min(0),
+        OtherFinancialServices: Yup.number().required('OtherFinancialServices is required').min(0),
     });
 
     const defaultValues = useMemo(
